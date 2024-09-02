@@ -1,0 +1,20 @@
+
+FROM golang:1.20-alpine AS builder
+
+WORKDIR /app
+
+COPY clients/go.mod clients/go.sum ./
+RUN go mod download
+
+COPY clients/client.go .
+
+RUN go build -o client client.go
+FROM alpine:latest
+
+WORKDIR /root/
+
+COPY --from=builder /app/client .
+
+ENTRYPOINT ["./client"]
+
+CMD ["./client"]

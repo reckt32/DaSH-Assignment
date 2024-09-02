@@ -8,6 +8,8 @@ import (
 	"net"
 	"os"
 	"strconv"
+
+	"github.com/joho/godotenv"
 )
 
 type Request struct {
@@ -18,13 +20,15 @@ type Request struct {
 type Response struct {
 	ClientID  string          `json:"ClientID"`
 	Prompt    string          `json:"Prompt"`
-	Message   json.RawMessage `json:"Message"`  
+	Message   json.RawMessage `json:"Message"`
 	TimeSent  int64           `json:"TimeSent"`
 	TimeRecvd int64           `json:"TimeRecvd"`
 	Source    string          `json:"Source"`
 }
 
 func main() {
+	godotenv.Load()
+
 	if len(os.Args) < 3 {
 		log.Fatal("Usage: go run client.go <ClientID> <NumClients>")
 	}
@@ -37,7 +41,7 @@ func main() {
 		log.Fatal("Invalid NumClients")
 	}
 
-	prompts, err := readLines("../input.txt")
+	prompts, err := readLines("/input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
